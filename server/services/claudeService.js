@@ -131,7 +131,7 @@ STRICT RULES:
 - Keep tone professional and direct, like a senior engineer writing an internal QA report.`;
 
 /**
- * Multi-provider AI service. Supports Claude (Anthropic) and OpenAI.
+ * Multi-provider AI service. Supports Claude (Anthropic), OpenAI, and Groq.
  * Provider is configured via AI_PROVIDER env var.
  */
 class AIService {
@@ -162,7 +162,9 @@ class AIService {
   async *streamAnalysis(testCases, buildInfo, historicalLogs) {
     const userMessage = this.formatUserMessage(testCases, buildInfo, historicalLogs);
 
-    if (this.provider === 'openai') {
+    if (this.provider === 'groq') {
+      yield* this._streamGroq(userMessage);
+    } else if (this.provider === 'openai') {
       yield* this._streamOpenAI(userMessage);
     } else {
       // Default to Claude
@@ -197,6 +199,30 @@ class AIService {
 
     const stream = await client.chat.completions.create({
       model: 'gpt-4o',
+      max_tokens: 4000,
+      stream: true,
+      messages: [
+        { role: 'system', content: MASTER_SYSTEM_PROMPT },
+        { role: 'user', content: userMessage }
+      ]
+    });
+
+    for await (const chunk of stream) {
+      const text = chunk.choices[0]?.delta?.content;
+      if (text) {
+        yield text;
+      }
+    }
+  }
+
+  async *_streamGroq(userMessage) {
+    const Groq = require('groq-sdk');
+    const client = new Groq({
+      apiKey: process.env.GROQ_API_KEY
+    });
+
+    const stream = await client.chat.completions.create({
+      model: 'llama-3.3-70b-versatile',
       max_tokens: 4000,
       stream: true,
       messages: [

@@ -80,7 +80,7 @@ export default function App() {
     );
   }
 
-  const sidebarWidth = sidebarCollapsed ? (window.innerWidth >= 1024 ? '80px' : '0px') : '260px';
+  const sidebarWidth = sidebarCollapsed ? (window.innerWidth >= 1024 ? '72px' : '0px') : '260px';
 
   return (
     <>

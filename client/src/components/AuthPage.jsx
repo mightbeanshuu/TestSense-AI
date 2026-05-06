@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useAuth } from '../hooks/useAuth';
-import { Mail, Lock, User, Eye, EyeOff, Zap, ArrowRight, Loader2 } from 'lucide-react';
+import { Mail, Lock, User, Eye, EyeOff, Zap, ArrowRight, Loader2, Shield, BarChart3, Bug } from 'lucide-react';
 
 export default function AuthPage() {
   const { login, register } = useAuth();
@@ -33,36 +33,91 @@ export default function AuthPage() {
     }
   };
 
+  const features = [
+    { icon: Zap, label: '10-Second Analysis', desc: 'AI-powered instant reports' },
+    { icon: Shield, label: 'Release Decisions', desc: 'Safe / Conditional / Block' },
+    { icon: BarChart3, label: 'Quality Scorecards', desc: 'A-F grading system' },
+    { icon: Bug, label: 'Flaky Detection', desc: 'Pattern-based tracking' },
+  ];
+
   return (
-    <div className="min-h-screen flex" style={{ background: 'var(--color-dark-bg)' }}>
+    <div className="min-h-screen flex" style={{ background: '#09090B' }}>
       {/* Left: Decorative panel */}
       <div className="hidden lg:flex flex-1 items-center justify-center relative overflow-hidden"
-        style={{ background: 'linear-gradient(135deg, #1A1726 0%, #2D1B69 50%, #6C63FF 100%)' }}>
+        style={{ background: 'linear-gradient(160deg, #09090B 0%, #1a0a2e 40%, #0f172a 100%)' }}>
         
-        {/* Animated orbs */}
-        <div className="absolute w-[400px] h-[400px] rounded-full opacity-20 animate-pulse"
-          style={{ background: 'radial-gradient(circle, #8B85FF, transparent)', top: '10%', left: '10%' }} />
-        <div className="absolute w-[300px] h-[300px] rounded-full opacity-15 animate-pulse"
-          style={{ background: 'radial-gradient(circle, #6C63FF, transparent)', bottom: '15%', right: '10%', animationDelay: '1s' }} />
+        {/* Ambient orbs */}
+        <div className="absolute w-[500px] h-[500px] rounded-full"
+          style={{ 
+            background: 'radial-gradient(circle, rgba(124,58,237,0.15), transparent 70%)', 
+            top: '-10%', left: '20%',
+            animation: 'float 8s ease-in-out infinite'
+          }} />
+        <div className="absolute w-[400px] h-[400px] rounded-full"
+          style={{ 
+            background: 'radial-gradient(circle, rgba(6,182,212,0.12), transparent 70%)', 
+            bottom: '0%', right: '10%',
+            animation: 'float 6s ease-in-out infinite reverse'
+          }} />
         
-        <div className="relative z-10 text-center px-12">
-          <div className="w-20 h-20 rounded-2xl mx-auto mb-8 flex items-center justify-center"
-            style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.15)' }}>
-            <Zap size={36} className="text-white" />
+        {/* Grid pattern overlay */}
+        <div className="absolute inset-0 opacity-[0.03]"
+          style={{
+            backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
+            backgroundSize: '60px 60px'
+          }} />
+        
+        <div className="relative z-10 px-12 max-w-lg">
+          {/* Logo */}
+          <div className="w-16 h-16 rounded-2xl mb-8 flex items-center justify-center"
+            style={{ 
+              background: 'linear-gradient(135deg, #7C3AED, #06B6D4)',
+              boxShadow: '0 0 40px rgba(124,58,237,0.3)'
+            }}>
+            <Zap size={28} className="text-white" />
           </div>
-          <h1 className="text-4xl font-bold text-white mb-4">TestSense AI</h1>
-          <p className="text-lg text-white/60 max-w-md mx-auto leading-relaxed">
-            AI-powered test intelligence that transforms hours of manual review into 10-second actionable reports.
+          
+          <h1 className="text-4xl font-bold text-white mb-3 tracking-tight">
+            TestSense <span style={{ color: '#A78BFA' }}>AI</span>
+          </h1>
+          <p className="text-[15px] leading-relaxed mb-10" style={{ color: '#71717A' }}>
+            Transform hours of manual test review into actionable intelligence in seconds. 
+            Built for engineering teams who ship fast.
           </p>
-          <div className="flex items-center justify-center gap-8 mt-12">
+          
+          {/* Feature cards */}
+          <div className="space-y-3">
+            {features.map(({ icon: Icon, label, desc }, i) => (
+              <div key={label} className="flex items-center gap-4 p-3 rounded-xl animate-slide-up"
+                style={{ 
+                  animationDelay: `${i * 0.1}s`,
+                  background: 'rgba(255,255,255,0.03)',
+                  border: '1px solid rgba(255,255,255,0.05)'
+                }}>
+                <div className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
+                  style={{ background: 'rgba(124,58,237,0.12)' }}>
+                  <Icon size={16} style={{ color: '#A78BFA' }} />
+                </div>
+                <div>
+                  <p className="text-[13px] font-semibold text-white">{label}</p>
+                  <p className="text-[11px]" style={{ color: '#52525B' }}>{desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Stats */}
+          <div className="flex items-center gap-10 mt-10 pt-8" 
+            style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
             {[
-              { num: '10s', label: 'Analysis Time' },
-              { num: '7', label: 'Test Categories' },
-              { num: 'A-F', label: 'Health Grades' },
+              { num: '~10s', label: 'Analysis' },
+              { num: '7', label: 'Categories' },
+              { num: 'A-F', label: 'Grading' },
             ].map(({ num, label }) => (
               <div key={label} className="text-center">
-                <p className="text-2xl font-bold text-white">{num}</p>
-                <p className="text-xs text-white/40 mt-1">{label}</p>
+                <p className="text-xl font-bold gradient-text">{num}</p>
+                <p className="text-[10px] font-medium mt-1 tracking-wider uppercase" 
+                  style={{ color: '#3F3F46' }}>{label}</p>
               </div>
             ))}
           </div>
@@ -70,38 +125,39 @@ export default function AuthPage() {
       </div>
 
       {/* Right: Auth form */}
-      <div className="flex-1 flex items-center justify-center p-6 lg:p-12">
-        <div className="w-full max-w-md">
+      <div className="flex-1 flex items-center justify-center p-6 lg:p-12" 
+        style={{ background: '#09090B' }}>
+        <div className="w-full max-w-[380px]">
           {/* Mobile logo */}
-          <div className="flex items-center gap-3 mb-8 lg:hidden">
+          <div className="flex items-center gap-3 mb-10 lg:hidden">
             <div className="w-10 h-10 rounded-xl flex items-center justify-center"
-              style={{ background: 'linear-gradient(135deg, #6C63FF, #8B85FF)' }}>
-              <Zap size={20} className="text-white" />
+              style={{ background: 'linear-gradient(135deg, #7C3AED, #06B6D4)' }}>
+              <Zap size={18} className="text-white" />
             </div>
-            <h1 className="text-xl font-bold gradient-text">TestSense AI</h1>
+            <h1 className="text-lg font-bold gradient-text">TestSense AI</h1>
           </div>
 
-          <h2 className="text-2xl font-bold mb-2" style={{ color: 'var(--color-dark-text)' }}>
+          <h2 className="text-[22px] font-bold mb-1.5 tracking-tight" style={{ color: '#FAFAFA' }}>
             {isLogin ? 'Welcome back' : 'Create account'}
           </h2>
-          <p className="text-sm mb-8" style={{ color: 'var(--color-dark-muted)' }}>
+          <p className="text-[13px] mb-7" style={{ color: '#52525B' }}>
             {isLogin 
-              ? 'Sign in to access your test intelligence dashboard' 
+              ? 'Sign in to your test intelligence dashboard' 
               : 'Start analysing your test cases with AI'}
           </p>
 
           {error && (
-            <div className="mb-4 px-4 py-3 rounded-xl text-sm font-medium animate-slide-up"
-              style={{ background: 'rgba(239, 68, 68, 0.1)', color: '#EF4444', border: '1px solid rgba(239, 68, 68, 0.2)' }}>
+            <div className="mb-5 px-4 py-3 rounded-xl text-[13px] font-medium animate-slide-up"
+              style={{ background: 'rgba(244, 63, 94, 0.08)', color: '#F43F5E', border: '1px solid rgba(244, 63, 94, 0.15)' }}>
               {error}
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-3.5">
             {!isLogin && (
               <div className="relative animate-slide-up">
-                <User size={16} className="absolute left-4 top-1/2 -translate-y-1/2" 
-                  style={{ color: 'var(--color-dark-muted)' }} />
+                <User size={15} className="absolute left-4 top-1/2 -translate-y-1/2" 
+                  style={{ color: '#3F3F46' }} />
                 <input
                   type="text"
                   placeholder="Full Name"
@@ -113,8 +169,8 @@ export default function AuthPage() {
             )}
 
             <div className="relative">
-              <Mail size={16} className="absolute left-4 top-1/2 -translate-y-1/2" 
-                style={{ color: 'var(--color-dark-muted)' }} />
+              <Mail size={15} className="absolute left-4 top-1/2 -translate-y-1/2" 
+                style={{ color: '#3F3F46' }} />
               <input
                 type="email"
                 placeholder="Email address"
@@ -126,8 +182,8 @@ export default function AuthPage() {
             </div>
 
             <div className="relative">
-              <Lock size={16} className="absolute left-4 top-1/2 -translate-y-1/2" 
-                style={{ color: 'var(--color-dark-muted)' }} />
+              <Lock size={15} className="absolute left-4 top-1/2 -translate-y-1/2" 
+                style={{ color: '#3F3F46' }} />
               <input
                 type={showPassword ? 'text' : 'password'}
                 placeholder="Password"
@@ -140,34 +196,36 @@ export default function AuthPage() {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-4 top-1/2 -translate-y-1/2"
-                style={{ color: 'var(--color-dark-muted)' }}
+                className="absolute right-4 top-1/2 -translate-y-1/2 transition-colors hover:text-white"
+                style={{ color: '#3F3F46' }}
               >
-                {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
               </button>
             </div>
 
             <button
               type="submit"
               disabled={loading}
-              className="btn-primary w-full justify-center py-3 text-base"
+              className="btn-primary w-full justify-center py-3.5 text-[14px] mt-2"
+              style={{ borderRadius: '12px' }}
             >
               {loading ? (
-                <Loader2 size={18} className="animate-spin" />
+                <Loader2 size={17} className="animate-spin" />
               ) : (
                 <>
                   {isLogin ? 'Sign In' : 'Create Account'}
-                  <ArrowRight size={16} />
+                  <ArrowRight size={15} />
                 </>
               )}
             </button>
           </form>
 
-          <p className="text-sm text-center mt-6" style={{ color: 'var(--color-dark-muted)' }}>
+          <p className="text-[13px] text-center mt-6" style={{ color: '#52525B' }}>
             {isLogin ? "Don't have an account?" : 'Already have an account?'}{' '}
             <button
               onClick={() => { setIsLogin(!isLogin); setError(''); }}
-              className="font-semibold text-primary hover:underline"
+              className="font-semibold transition-colors hover:underline"
+              style={{ color: '#A78BFA' }}
             >
               {isLogin ? 'Sign Up' : 'Sign In'}
             </button>

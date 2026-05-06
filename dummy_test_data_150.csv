@@ -1,0 +1,151 @@
+ID,Name,Steps,Expected,Actual,Status
+TC001,Login with valid credentials,"1. Navigate to login page 2. Enter valid email 3. Enter valid password 4. Click Sign In",User is redirected to dashboard,User is redirected to dashboard,PASS
+TC002,Login with invalid password,"1. Navigate to login page 2. Enter valid email 3. Enter wrong password 4. Click Sign In",Error message: Invalid credentials,Error message: Invalid credentials,PASS
+TC003,Login with empty fields,"1. Navigate to login page 2. Leave fields empty 3. Click Sign In",Validation error shown,Validation error shown,PASS
+TC004,Login with SQL injection,"1. Navigate to login 2. Enter SQL injection in email 3. Click Sign In",Request rejected/sanitized,Request rejected/sanitized,PASS
+TC005,Registration with valid data,"1. Navigate to register 2. Fill all fields 3. Click Register",Account created successfully,Account created successfully,PASS
+TC006,Registration duplicate email,"1. Navigate to register 2. Enter existing email 3. Click Register",Error: Email already exists,Error: Email already exists,PASS
+TC007,Password reset flow,"1. Click Forgot Password 2. Enter email 3. Click Send Reset",Reset email sent,Reset email sent,PASS
+TC008,OAuth Google login,"1. Click Sign in with Google 2. Select account 3. Authorize",User logged in via Google,Login failed - OAuth callback error,FAIL
+TC009,Session timeout handling,"1. Login 2. Wait 30 minutes idle 3. Try action",Session expired prompt shown,Session expired prompt shown,PASS
+TC010,Multi-factor authentication,"1. Login 2. Enter MFA code 3. Verify",Access granted after MFA,MFA page loads indefinitely,FAIL
+TC011,Dashboard loads correctly,"1. Login 2. Navigate to dashboard",All widgets and data load,All widgets and data load,PASS
+TC012,Dashboard performance under load,"1. Login 2. Open dashboard with 10k records",Dashboard loads within 3 seconds,Dashboard loads in 2.1 seconds,PASS
+TC013,Dashboard widget refresh,"1. Click refresh on metrics widget",Data refreshes with latest values,Data refreshes with latest values,PASS
+TC014,Dashboard date range filter,"1. Select custom date range 2. Apply filter",Data filtered by selected dates,Data filtered by selected dates,PASS
+TC015,Dashboard export to CSV,"1. Click Export CSV on dashboard",CSV file downloads with all data,CSV file downloads with all data,PASS
+TC016,User profile update,"1. Go to settings 2. Update display name 3. Save",Profile updated successfully,Profile updated successfully,PASS
+TC017,Profile picture upload,"1. Go to settings 2. Upload image 3. Save",Avatar updated,Avatar updated,PASS
+TC018,Change password,"1. Go to settings 2. Enter old and new password 3. Save",Password changed successfully,Password changed successfully,PASS
+TC019,Delete account,"1. Go to settings 2. Click Delete Account 3. Confirm",Account deleted and logged out,Account deleted and logged out,PASS
+TC020,API key generation,"1. Go to settings 2. Click Generate API Key",New API key generated,New API key generated,PASS
+TC021,Test case upload CSV,"1. Go to Analyse 2. Upload CSV file 3. Verify preview",CSV parsed and preview shown,CSV parsed and preview shown,PASS
+TC022,Test case upload Excel,"1. Go to Analyse 2. Upload Excel file 3. Verify preview",Excel parsed and preview shown,Excel parsed and preview shown,PASS
+TC023,Test case paste text,"1. Go to Analyse 2. Paste test data in text box",Text accepted for analysis,Text accepted for analysis,PASS
+TC024,Test case upload large file,"1. Upload 50MB file",Error: File too large,Error: File too large,PASS
+TC025,Analysis stream initiation,"1. Upload test data 2. Click Analyse Now",SSE stream begins,SSE stream begins,PASS
+TC026,Analysis report rendering,"1. Start analysis 2. Wait for completion",Full report renders with all sections,Full report renders with all sections,PASS
+TC027,Analysis cancellation,"1. Start analysis 2. Click Cancel",Analysis stops gracefully,Page freezes momentarily,FAIL
+TC028,Concurrent analysis prevention,"1. Start analysis 2. Try to start another",Second analysis blocked,Second analysis blocked,PASS
+TC029,Analysis with empty input,"1. Click Analyse with no data",Validation error: No test data,Validation error: No test data,PASS
+TC030,Report PDF generation,"1. Complete analysis 2. Click Export PDF",PDF downloads with formatted report,PDF downloads with formatted report,PASS
+TC031,Report share link creation,"1. Complete analysis 2. Click Share",Share URL generated and copied,Share URL generated and copied,PASS
+TC032,Shared report access,"1. Open share link in incognito",Report loads without authentication,Report loads without authentication,PASS
+TC033,Report deletion,"1. Go to Reports 2. Delete a report 3. Confirm",Report removed from list,Report removed from list,PASS
+TC034,Build history listing,"1. Go to History page",All past builds listed chronologically,All past builds listed chronologically,PASS
+TC035,Build history search,"1. Go to History 2. Search by build number",Matching builds shown,Matching builds shown,PASS
+TC036,Build history expand,"1. Click on a build row",Build details expand with full report,Build details expand with full report,PASS
+TC037,Build history chart,"1. Go to History with 5+ builds",Pass rate trend chart renders,Pass rate trend chart renders,PASS
+TC038,Build history delete,"1. Click delete on a build 2. Confirm",Build removed from history,Build removed from history,PASS
+TC039,Flaky tracker loading,"1. Navigate to Flaky Tracker",Flaky tests listed with scores,Flaky tests listed with scores,PASS
+TC040,Flaky tracker filter by score,"1. Go to Flaky Tracker 2. Filter by 81-100%",Only critical flaky tests shown,Only critical flaky tests shown,PASS
+TC041,Dark mode toggle,"1. Click theme toggle",UI switches to dark/light mode,UI switches to dark/light mode,PASS
+TC042,Responsive layout mobile,"1. Resize browser to 375px width",Layout adapts to mobile view,Sidebar overlaps content,FAIL
+TC043,Responsive layout tablet,"1. Resize browser to 768px width",Layout adapts to tablet view,Layout adapts to tablet view,PASS
+TC044,Sidebar collapse,"1. Click collapse button on sidebar",Sidebar collapses to icons only,Sidebar collapses to icons only,PASS
+TC045,Navigation between pages,"1. Click each nav item sequentially",All pages load without errors,All pages load without errors,PASS
+TC046,Browser back button,"1. Navigate to several pages 2. Click back",Previous page loads correctly,Previous page loads correctly,PASS
+TC047,Page not found handling,"1. Navigate to /nonexistent",404 or redirect to home,Redirects to home,PASS
+TC048,API rate limiting,"1. Send 15 requests in 1 minute",Rate limit error after limit,Rate limit error after limit,PASS
+TC049,JWT token expiration,"1. Login 2. Wait for token to expire 3. Make request",Redirect to login page,Redirect to login page,PASS
+TC050,CORS policy enforcement,"1. Send API request from unauthorized origin",Request blocked by CORS,Request blocked by CORS,PASS
+TC051,XSS prevention in inputs,"1. Enter script tag in text field 2. Submit",Script not executed / sanitized,Script not executed / sanitized,PASS
+TC052,File upload malicious file,"1. Upload .exe file renamed to .csv",File rejected by MIME check,File rejected by MIME check,PASS
+TC053,SQL injection in search,"1. Enter SQL injection in search field",Query parameterized / no injection,Query parameterized / no injection,PASS
+TC054,CSRF token validation,"1. Submit form without CSRF token",Request rejected,Request rejected,PASS
+TC055,HTTP to HTTPS redirect,"1. Access site via HTTP",Redirected to HTTPS,Redirected to HTTPS,PASS
+TC056,Payment module checkout,"1. Add item to cart 2. Proceed to checkout 3. Complete payment",Payment processed successfully,Payment timeout after 30s,FAIL
+TC057,Payment module refund,"1. Go to order 2. Request refund",Refund initiated,Refund initiated,PASS
+TC058,Order history display,"1. Go to My Orders",All past orders listed,All past orders listed,PASS
+TC059,Notification system email,"1. Trigger email notification event",Email sent successfully,Email sent successfully,PASS
+TC060,Notification system push,"1. Trigger push notification",Push notification received,Push notification not delivered,FAIL
+TC061,Search functionality basic,"1. Enter search term 2. Click Search",Relevant results displayed,Relevant results displayed,PASS
+TC062,Search with special characters,"1. Search with @#$% characters",Results or no-match message shown,Results or no-match message shown,PASS
+TC063,Search pagination,"1. Search term with 100+ results 2. Click page 2",Page 2 results load correctly,Page 2 results load correctly,PASS
+TC064,Search autocomplete,"1. Type partial search term",Suggestions dropdown appears,Suggestions dropdown appears,PASS
+TC065,Sorting table columns,"1. Click column header to sort",Table sorts ascending/descending,Table sorts ascending/descending,PASS
+TC066,Filtering table results,"1. Apply category filter",Table shows filtered results,Table shows filtered results,PASS
+TC067,Table row selection,"1. Click checkbox on row",Row highlighted as selected,Row highlighted as selected,PASS
+TC068,Bulk action on selected rows,"1. Select multiple rows 2. Click Bulk Delete",Selected items deleted,Confirmation not shown before delete,FAIL
+TC069,Internationalization EN,"1. Set language to English",All text in English,All text in English,PASS
+TC070,Internationalization FR,"1. Set language to French",All text in French,Some labels remain in English,FAIL
+TC071,Timezone display handling,"1. Login from UTC+5 timezone",Timestamps show in local time,Timestamps show in local time,PASS
+TC072,Data export full report,"1. Generate report 2. Export all data",Complete data exported,Complete data exported,PASS
+TC073,Data import from backup,"1. Upload backup JSON 2. Import",Data restored successfully,Data restored successfully,PASS
+TC074,Audit log creation,"1. Perform any action",Action logged in audit trail,Action logged in audit trail,PASS
+TC075,Audit log viewing,"1. Go to Admin > Audit Logs",Logs displayed with timestamps,Logs displayed with timestamps,PASS
+TC076,Role-based access admin,"1. Login as admin 2. Access admin panel",Admin panel accessible,Admin panel accessible,PASS
+TC077,Role-based access user,"1. Login as regular user 2. Try admin panel",Access denied message,Access denied message,PASS
+TC078,Role-based access guest,"1. Try to access protected page without login",Redirect to login,Redirect to login,PASS
+TC079,WebSocket connection,"1. Open app 2. Verify WS connection",WebSocket connected,WebSocket connected,PASS
+TC080,WebSocket reconnection,"1. Drop network 2. Restore",WebSocket reconnects automatically,WebSocket reconnects after 5s delay,PASS
+TC081,Real-time updates,"1. Open app in 2 tabs 2. Make change in tab 1",Tab 2 reflects change in real-time,Tab 2 reflects change in real-time,PASS
+TC082,File download from report,"1. Open report 2. Click download link",File downloads correctly,File downloads correctly,PASS
+TC083,Image upload validation,"1. Upload image > 5MB",Error: Image too large,Error: Image too large,PASS
+TC084,Clipboard paste handling,"1. Paste content from clipboard",Content pasted and processed,Content pasted and processed,PASS
+TC085,Drag and drop file upload,"1. Drag file onto upload zone",File uploaded successfully,File uploaded successfully,PASS
+TC086,Form validation email format,"1. Enter invalid email format 2. Submit",Validation error shown,Validation error shown,PASS
+TC087,Form validation required fields,"1. Submit form with empty required fields",All required field errors shown,All required field errors shown,PASS
+TC088,Form autosave draft,"1. Fill partial form 2. Navigate away 3. Return",Draft data restored,Draft data restored,PASS
+TC089,Loading state indicators,"1. Trigger any async operation",Loading spinner/skeleton shown,Loading spinner/skeleton shown,PASS
+TC090,Error boundary handling,"1. Trigger component error",Error boundary catches and shows fallback,Error boundary catches and shows fallback,PASS
+TC091,Memory leak detection,"1. Navigate pages rapidly 100 times",No memory growth beyond threshold,Memory grows by 15MB after 100 navigations,FAIL
+TC092,API response time P95,"1. Send 100 API requests 2. Measure P95 latency",P95 under 500ms,P95 at 320ms,PASS
+TC093,API response time P99,"1. Send 1000 API requests 2. Measure P99 latency",P99 under 1000ms,P99 at 1850ms,FAIL
+TC094,Database connection pool,"1. Simulate 50 concurrent connections",All connections handled,All connections handled,PASS
+TC095,Database failover,"1. Kill primary DB 2. Check app behavior",App switches to replica,App returns 500 errors for 10s,FAIL
+TC096,Cache invalidation,"1. Update data 2. Check cached response",Cache returns fresh data,Stale data returned for 30s,FAIL
+TC097,CDN asset loading,"1. Load page 2. Check asset origins",Static assets served from CDN,Static assets served from CDN,PASS
+TC098,Gzip compression,"1. Check response headers",Content-Encoding: gzip present,Content-Encoding: gzip present,PASS
+TC099,SSL certificate validation,"1. Check SSL cert",Valid cert with correct domain,Valid cert with correct domain,PASS
+TC100,Cookie security attributes,"1. Inspect cookies",HttpOnly and Secure flags set,HttpOnly and Secure flags set,PASS
+TC101,Content Security Policy,"1. Check CSP headers",Strict CSP header present,Strict CSP header present,PASS
+TC102,Accessibility screen reader,"1. Navigate with screen reader",All elements properly labeled,3 buttons missing aria-labels,FAIL
+TC103,Accessibility keyboard nav,"1. Navigate using only keyboard",All interactive elements reachable,All interactive elements reachable,PASS
+TC104,Accessibility color contrast,"1. Run contrast checker",All text meets WCAG AA,2 low-contrast text elements found,FAIL
+TC105,Print view formatting,"1. Open report 2. Print preview",Report formatted for printing,Report formatted for printing,PASS
+TC106,Deeplink direct URL access,"1. Open specific report URL directly",Report loads directly,Report loads directly,PASS
+TC107,Browser tab title update,"1. Navigate between pages",Tab title updates per page,Tab title updates per page,PASS
+TC108,Favicon display,"1. Check browser tab",Favicon displayed correctly,Favicon displayed correctly,PASS
+TC109,Service worker registration,"1. Load app 2. Check SW status",Service worker registered,Service worker registered,PASS
+TC110,Offline mode basic,"1. Go offline 2. Access cached page",Cached page loads,Network error shown,FAIL
+TC111,Auto-update notification,"1. Deploy new version",Update available notification shown,Update available notification shown,PASS
+TC112,Feature flag toggle,"1. Enable feature flag",Feature enabled for user,Feature enabled for user,PASS
+TC113,A/B test variant assignment,"1. Load page 2. Check variant",Consistent variant assigned,Consistent variant assigned,PASS
+TC114,Analytics event tracking,"1. Click CTA button",Analytics event fired,Analytics event fired,PASS
+TC115,Error tracking integration,"1. Trigger error",Error reported to monitoring,Error reported to monitoring,PASS
+TC116,Health check endpoint,"1. Call /api/health",Returns 200 with status: ok,Returns 200 with status: ok,PASS
+TC117,Graceful shutdown,"1. Send SIGTERM to server",Pending requests complete then shutdown,Pending requests complete then shutdown,PASS
+TC118,Log aggregation,"1. Generate logs 2. Check log service",Logs appear in centralized system,Logs appear in centralized system,PASS
+TC119,Docker container startup,"1. Run docker-compose up",All services start successfully,MongoDB container fails to start,FAIL
+TC120,Environment config validation,"1. Start app with missing env vars",Clear error message for missing config,Clear error message for missing config,PASS
+TC121,Database migration up,"1. Run migration script",Schema updated successfully,Schema updated successfully,PASS
+TC122,Database migration rollback,"1. Run rollback script",Schema reverted cleanly,Schema reverted cleanly,PASS
+TC123,Seed data population,"1. Run seed script",Test data populated,Test data populated,PASS
+TC124,API versioning v1,"1. Call /api/v1/endpoint",V1 response format returned,V1 response format returned,PASS
+TC125,API versioning v2,"1. Call /api/v2/endpoint",V2 response format returned,V2 response format returned,PASS
+TC126,Webhook delivery,"1. Trigger webhook event",Webhook delivered to endpoint,Webhook delivered to endpoint,PASS
+TC127,Webhook retry on failure,"1. Webhook endpoint down 2. Trigger event",Retry with exponential backoff,Retried but no backoff applied,FAIL
+TC128,Batch processing 1k items,"1. Submit batch of 1000 items",All items processed,All items processed,PASS
+TC129,Batch processing 10k items,"1. Submit batch of 10000 items",All items processed within timeout,Processing times out at 8000 items,FAIL
+TC130,Queue processing order,"1. Enqueue 100 jobs",Jobs processed in FIFO order,Jobs processed in FIFO order,PASS
+TC131,Dead letter queue,"1. Fail a job 3 times",Job moved to dead letter queue,Job moved to dead letter queue,PASS
+TC132,Email template rendering,"1. Trigger email with template",Email renders with correct data,Email renders with correct data,PASS
+TC133,SMS notification delivery,"1. Trigger SMS notification",SMS delivered to phone,SMS delivery delayed by 5 minutes,FAIL
+TC134,Two-factor setup flow,"1. Go to security settings 2. Enable 2FA",QR code generated for authenticator,QR code generated for authenticator,PASS
+TC135,Password strength meter,"1. Type password in registration",Strength meter updates in real-time,Strength meter updates in real-time,PASS
+TC136,Account lockout after failures,"1. Fail login 5 times",Account locked for 15 minutes,Account locked for 15 minutes,PASS
+TC137,GDPR data export,"1. Request personal data export",ZIP file with all user data,ZIP file with all user data,PASS
+TC138,GDPR data deletion,"1. Request account deletion",All personal data purged,All personal data purged,PASS
+TC139,Cookie consent banner,"1. Visit site first time",Cookie consent banner shown,Cookie consent banner shown,PASS
+TC140,Terms acceptance tracking,"1. Accept terms 2. Check database",Acceptance timestamp recorded,Acceptance timestamp recorded,PASS
+TC141,Multi-tenant data isolation,"1. Login as Tenant A 2. Try to access Tenant B data",Access denied,Access denied,PASS
+TC142,API pagination default,"1. Call list endpoint without page param",Returns first 20 items with pagination meta,Returns first 20 items with pagination meta,PASS
+TC143,API pagination last page,"1. Call list endpoint with last page",Returns remaining items,Returns remaining items,PASS
+TC144,API field selection,"1. Call endpoint with fields=name,email",Only requested fields returned,Only requested fields returned,PASS
+TC145,API error format consistency,"1. Trigger 400, 401, 404, 500 errors",All follow consistent error schema,404 returns HTML instead of JSON,FAIL
+TC146,Concurrent user edit conflict,"1. User A and B edit same record 2. Both save",Conflict resolution shown,Last save overwrites silently,FAIL
+TC147,Real-time collaboration cursor,"1. Two users edit same document",Both cursors visible,Both cursors visible,PASS
+TC148,File versioning,"1. Upload file 2. Upload new version",Both versions accessible,Both versions accessible,PASS
+TC149,Scheduled task execution,"1. Schedule task for specific time 2. Wait",Task executes at scheduled time,Task executes at scheduled time,PASS
+TC150,System stress test 500 users,"1. Simulate 500 concurrent users",Response time under 2s P95,Response time 3.2s P95,FAIL

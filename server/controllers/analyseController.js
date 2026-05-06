@@ -122,28 +122,77 @@ function parseReportMetadata(report) {
   };
 
   try {
-    // Extract build stats from BUILD ANALYSIS section
-    const totalMatch = report.match(/Total\s+tests?\s*[:|]\s*(\d+)/i);
-    const passedMatch = report.match(/Passed\s*[:|]\s*(\d+)/i);
-    const failedMatch = report.match(/Failed\s*[:|]\s*(\d+)/i);
-    const skippedMatch = report.match(/Skipped\s*[:|]\s*(\d+)/i);
-
-    if (totalMatch) metadata.totalTests = parseInt(totalMatch[1]);
-    if (passedMatch) metadata.passed = parseInt(passedMatch[1]);
-    if (failedMatch) metadata.failed = parseInt(failedMatch[1]);
-    if (skippedMatch) metadata.skipped = parseInt(skippedMatch[1]);
-
-    if (metadata.totalTests > 0) {
-      metadata.passRate = Math.round((metadata.passed / metadata.totalTests) * 100);
+    // Strategy 1: Look for "Total tests | Passed | Failed | Skipped | Blocked: X | Y | Z | ..."
+    const pipedStats = report.match(/Total\s+tests?\s*\|[^:]*:\s*(\d+)\s*\|\s*(\d+)\s*\|\s*(\d+)\s*\|\s*(\d+)/i);
+    if (pipedStats) {
+      metadata.totalTests = parseInt(pipedStats[1]);
+      metadata.passed = parseInt(pipedStats[2]);
+      metadata.failed = parseInt(pipedStats[3]);
+      metadata.skipped = parseInt(pipedStats[4]);
     }
 
-    // Extract release decision
-    if (/SAFE TO RELEASE.*YES/i.test(report) || /YES.*SAFE TO RELEASE/i.test(report)) {
-      metadata.releaseDecision = 'SAFE';
-    } else if (/CONDITIONAL/i.test(report) && /RELEASE/i.test(report)) {
-      metadata.releaseDecision = 'CONDITIONAL';
-    } else if (/NO.*SAFE TO RELEASE|DO NOT RELEASE|NOT.*SAFE/i.test(report)) {
+    // Strategy 2: Look for individual labels
+    if (metadata.totalTests === 0) {
+      const totalMatch = report.match(/Total\s+tests?\s*[:|]\s*(\d+)/i);
+      const passedMatch = report.match(/Passed\s*[:|]\s*(\d+)/i);
+      const failedMatch = report.match(/Failed\s*[:|]\s*(\d+)/i);
+      const skippedMatch = report.match(/Skipped\s*[:|]\s*(\d+)/i);
+
+      if (totalMatch) metadata.totalTests = parseInt(totalMatch[1]);
+      if (passedMatch) metadata.passed = parseInt(passedMatch[1]);
+      if (failedMatch) metadata.failed = parseInt(failedMatch[1]);
+      if (skippedMatch) metadata.skipped = parseInt(skippedMatch[1]);
+    }
+
+    // Strategy 3: Count from test categorization table
+    if (metadata.totalTests === 0) {
+      const stablePassing = (report.match(/STABLE.PASSING/gi) || []).length;
+      const regression = (report.match(/REGRESSION/gi) || []).length;
+      const flaky = (report.match(/FLAKY/gi) || []).length;
+      const failing = (report.match(/CONSISTENTLY.FAILING/gi) || []).length;
+      const newTest = (report.match(/NEW.TEST/gi) || []).length;
+      const fixed = (report.match(/FIXED/gi) || []).length;
+      const skipped = (report.match(/SKIPPED|BLOCKED/gi) || []).length;
+      
+      const totalFromTable = stablePassing + regression + flaky + failing + newTest + fixed + skipped;
+      if (totalFromTable > 5) {
+        // Only use this if we found a meaningful number (dividing by 2 since categories appear in header + rows)
+        metadata.totalTests = Math.round(totalFromTable / 2);
+        metadata.passed = Math.round(stablePassing / 2) + Math.round(fixed / 2);
+        metadata.failed = Math.round(regression / 2) + Math.round(failing / 2);
+      }
+    }
+
+    // Calculate pass rate
+    if (metadata.totalTests > 0) {
+      metadata.passRate = Math.round((metadata.passed / metadata.totalTests) * 100);
+    } else {
+      // Try to extract from report text directly
+      const rateMatch = report.match(/pass\s*rate[:\s]*(\d+(?:\.\d+)?)\s*%/i);
+      if (rateMatch) {
+        metadata.passRate = Math.round(parseFloat(rateMatch[1]));
+      }
+    }
+
+    // Extract release decision — more robust matching
+    const releaseSection = report.match(/SAFE TO RELEASE[\s\S]{0,200}/i) || [''];
+    const releaseText = releaseSection[0];
+    
+    if (/\bNO\b/i.test(releaseText) && !/\bYES\b/i.test(releaseText)) {
       metadata.releaseDecision = 'DO_NOT_RELEASE';
+    } else if (/\bCONDITIONAL\b/i.test(releaseText)) {
+      metadata.releaseDecision = 'CONDITIONAL';
+    } else if (/\bYES\b/i.test(releaseText)) {
+      metadata.releaseDecision = 'SAFE';
+    }
+    
+    // Fallback: check for bold NO or standalone patterns
+    if (metadata.releaseDecision === 'UNKNOWN') {
+      if (/DO\s*NOT\s*RELEASE|NOT\s+SAFE/i.test(report)) {
+        metadata.releaseDecision = 'DO_NOT_RELEASE';
+      } else if (/CONDITIONAL/i.test(report) && /RELEASE/i.test(report)) {
+        metadata.releaseDecision = 'CONDITIONAL';
+      }
     }
 
     // Extract overall grade from scorecard
