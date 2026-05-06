@@ -21,7 +21,7 @@ export default function BuildHistory({ darkMode }) {
   }));
 
   const gradeColor = (grade) => {
-    const map = { A: '#22C55E', B: '#84CC16', C: '#F59E0B', D: '#F97316', F: '#EF4444' };
+    const map = { A: '#10B981', B: '#84CC16', C: '#F59E0B', D: '#F97316', F: '#F43F5E' };
     return map[grade] || '#6B7280';
   };
 
@@ -89,18 +89,17 @@ export default function BuildHistory({ darkMode }) {
                   <stop offset="95%" stopColor="#6C63FF" stopOpacity={0} />
                 </linearGradient>
               </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke={darkMode ? '#2D2A3E' : '#E5E1F0'} />
-              <XAxis dataKey="build" tick={{ fontSize: 11, fill: darkMode ? '#9794A8' : '#6B6880' }} />
-              <YAxis domain={[0, 100]} tick={{ fontSize: 11, fill: darkMode ? '#9794A8' : '#6B6880' }} />
+              <CartesianGrid strokeDasharray="3 3" stroke={darkMode ? '#1e1e22' : '#eee'} />
+              <XAxis dataKey="build" tick={{ fontSize: 11, fill: darkMode ? '#555' : '#999' }} />
+              <YAxis domain={[0, 100]} tick={{ fontSize: 11, fill: darkMode ? '#555' : '#999' }} />
               <Tooltip
                 contentStyle={{
-                  background: darkMode ? '#221F31' : '#FFFFFF',
-                  border: `1px solid ${darkMode ? '#2D2A3E' : '#E5E1F0'}`,
-                  borderRadius: '12px',
-                  fontSize: '12px'
+                  background: darkMode ? '#1a1a1e' : '#fff',
+                  border: `1px solid ${darkMode ? '#25252b' : '#eee'}`,
+                  borderRadius: '10px', fontSize: '12px'
                 }}
               />
-              <Area type="monotone" dataKey="passRate" stroke="#6C63FF" strokeWidth={2.5}
+              <Area type="monotone" dataKey="passRate" stroke="#7C3AED" strokeWidth={2}
                 fill="url(#passGradient)" name="Pass Rate %" />
             </AreaChart>
           </ResponsiveContainer>

@@ -80,7 +80,7 @@ export default function App() {
     );
   }
 
-  const sidebarWidth = sidebarCollapsed ? (window.innerWidth >= 1024 ? '72px' : '0px') : '260px';
+  const sidebarWidth = sidebarCollapsed ? (window.innerWidth >= 1024 ? '64px' : '0px') : '240px';
 
   return (
     <>
@@ -109,8 +109,8 @@ export default function App() {
       >
         <Navbar darkMode={darkMode} setDarkMode={setDarkMode} />
 
-        <main className="pt-16 px-4 sm:px-6 lg:px-8 pb-8">
-          <div className="max-w-[1200px] mx-auto py-6">
+        <main style={{ paddingTop: '80px', paddingBottom: '40px' }} className="px-5 sm:px-7 lg:px-8 relative z-10">
+          <div className="max-w-[1100px] mx-auto">
             <Routes>
               <Route path="/" element={
                 <ProtectedRoute user={user}><Home darkMode={darkMode} /></ProtectedRoute>
